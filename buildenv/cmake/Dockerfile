@@ -1,6 +1,5 @@
 FROM ubuntu:latest
 
-MAINTAINER itdream "jongsx1203@gmail.com"
 WORKDIR /root
 
 ENV TZ=Europe/Kiev
