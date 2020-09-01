@@ -16,7 +16,10 @@ RUN yum update -y \
     && bash autogen.sh \
     && ./configure --enable-cxx --prefix=$HDF_INSTALL_PATH \
     && make -j 4 \
-    && make install
+    && make install \
+    && mkdir /var/run/sshd \
+    && echo 'root:password' | chpasswd \
+    && sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
 # Exposing 22 port
 EXPOSE 22
