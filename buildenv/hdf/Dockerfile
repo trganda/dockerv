@@ -8,7 +8,7 @@ ENV HDF_INSTALL_PATH=/opt/hdf5
 
 RUN apt-get clean \
     && apt-get update \
-    && apt-get install tofrodos unzip -y \
+    && apt-get install tofrodos unzip libtool -y \
     && curl https://hdf-wordpress-1.s3.amazonaws.com/wp-content/uploads/manual/HDF5/HDF5_$HDFPATH/source/hdf5-$HDFVERSION.zip -o hdf5-$HDFVERSION.zip \
     && unzip hdf5-$HDFVERSION.zip \
     && cd hdf5-$HDFVERSION \
