@@ -4,7 +4,7 @@ WORKDIR /root
 
 ENV HDFVERSION=1.12.0
 ENV HDFPATH=1_12_0
-ENV HDF_INSTALL_PATH=/opt/hdf5
+ENV HDF_INSTALL_PATH=/usr/local/hdf5
 
 RUN yum update -y \
     && yum groupinstall "Development Tools" -y \
