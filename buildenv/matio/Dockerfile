@@ -10,7 +10,7 @@ RUN yum update -y \
     && ./configure --with-hdf5=/usr/local/hdf5 --prefix=/usr/local/matio \
     && make -j 4 \
     && make install \
-    && rm -rf /root/matio
+    && rm -rf /root/matio \
     && ssh-keygen -q -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -y \
     && ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -y \
     && ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key -y \
