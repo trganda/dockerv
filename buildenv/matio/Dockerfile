@@ -9,7 +9,14 @@ RUN yum update -y \
     && bash autogen.sh \
     && ./configure --with-hdf5=/opt/hdf5 --prefix=/usr/local/matio \
     && make -j 4 \
-    && make install
+    && make install \
+    && ssh-keygen -q -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key \
+    && ssh-keygen -q -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key \
+    && ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key \
+    && echo 'root:password' | chpasswd \
+    && sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config \
+    && sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config \
+    && sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config
 
 # Exposing 22 port
 EXPOSE 22
