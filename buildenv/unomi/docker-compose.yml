@@ -1,0 +1,23 @@
+services:
+  unomi:
+    image: jongsx/unomi:1.5.0
+    ports:
+      - 5005:5005
+      - 8181:8181
+      - 9443:9443
+    environment:
+      - KARAF_DEBUG=true
+      - UNOMI_ELASTICSEARCH_ADDRESSES=elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+  elasticsearch:
+    image: elasticsearch:7.4.2
+    container_name: elasticsearch-7.4.2
+    environment:
+        - cluster.name=contextElasticSearch
+        - bootstrap.memory_lock=true
+        - discovery.type=single-node
+    ports:
+        - 9200:9200
