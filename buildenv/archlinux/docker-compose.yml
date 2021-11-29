@@ -1,0 +1,5 @@
+services:
+  os:
+    image: jongsx/archlinux
+    ports:
+      - 2222:22
