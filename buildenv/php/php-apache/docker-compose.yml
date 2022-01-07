@@ -1,0 +1,15 @@
+version: '3'
+services:
+  web:
+    image: php:7.2-apache
+    volumes:
+      - ./src/:/var/www/html/
+      - ./config/php.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "8080:80"
+    networks:
+      - db
+
+networks:
+  db:
+    driver: bridge
