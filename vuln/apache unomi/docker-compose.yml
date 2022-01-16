@@ -13,8 +13,8 @@ services:
     links:
       - elasticsearch
   elasticsearch:
-    image: elasticsearch:7.4.2
-    container_name: elasticsearch-7.4.2
+    image: elasticsearch:7.16.3
+    container_name: elasticsearch-7.16.3
     environment:
         - cluster.name=contextElasticSearch
         - bootstrap.memory_lock=true
