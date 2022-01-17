@@ -148,3 +148,15 @@ Accept-Encoding: identity
 Host: 192.168.1.111:8000
 Connection: Keep-Alive
 ```
+
+### Debug with Container
+
+The contianer has exposed the debug port on `5005`, you can clone [unomi] and checkout to the tag `unomi-root-1.5.0` with
+
+```bash
+git clone https://github.com/apache/unomi.git && cd unomi && git checkout unomi-root-1.5.0
+```
+
+Suppose we open with idea, choose `Add Configuration -> Add Remote JVM Debug -> ok`.
+
+Now you can debug as your want.
