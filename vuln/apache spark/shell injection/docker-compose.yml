@@ -12,7 +12,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - ./poc.tar:/poc.tar
+      - ./poc.tar:/`touch\ poc.txt`&&poc.tar
   spark-worker:
     image: docker.io/bitnami/spark:3.1.2
     environment:

