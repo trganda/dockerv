@@ -1,0 +1,43 @@
+version: "3.8"
+
+
+services:
+  openldap:
+    image: jongsx/openldap:latest
+    container_name: openldap
+    volumes:
+      - openldap-data:/var/lib/ldap
+      - openldap-data:/etc/ldap/slapd.d
+    environment:
+      - LDAP_ORGANISATION=trganda
+      - LDAP_DOMAIN=trganda.com
+      - LDAP_ADMIN_PASSWORD=changeme
+      - LDAP_RFC2307BIS_SCHEMA=true
+      - LDAP_REMOVE_CONFIG_AFTER_SETUP=true
+      - LDAP_TLS_VERIFY_CLIENT=never
+    ports:
+      - 389:389
+      - 636:636
+    networks:
+      - openldap
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      - PHPLDAPADMIN_HTTPS=false
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+    depends_on:
+      - openldap
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - openldap
+      
+networks:
+  openldap:
+    name: openldap
+    
+volumes:
+  openldap-data:
