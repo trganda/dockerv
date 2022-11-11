@@ -11,3 +11,9 @@ ADD schema/java.schema /container/service/slapd/assets/config/bootstrap/schema/c
 ADD schema/corba.schema /container/service/slapd/assets/config/bootstrap/schema/custom/
 ```
 
+Login with
+
+```
+cn=admin,dc=trganda,dc=com
+changeme
+```
