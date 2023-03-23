@@ -1,10 +1,10 @@
 ## 使用方式
 
-使用此方式配置MEMOS是为了开启`https`。
+使用此方式配置 MEMOS 是为了能够开启 `https`。
 
-> 以下内容参考了vietanhdev的项目[my-memos](https://github.com/vietanhdev/my-memos)
+> 以下内容参考了 vietanhdev 的项目 [my-memos](https://github.com/vietanhdev/my-memos)
 
-通过certbot获取证书，假设域名为`dev.com`
+通过 certbot 获取证书，假设域名为`dev.com`
 
 ```sh
 certbot certonly --standalone -d dev.com
@@ -17,7 +17,7 @@ chown <user> <path>
 chmod 400 <path>
 ```
 
-之后启动`Docker Compose`
+之后启动 MEMOS
 
 ```sh
 docker-compose up -d
