@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    # enable local load infile
+    command: --default-authentication-plugin=mysql_native_password 	--local-infile=ON
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
