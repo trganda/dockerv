@@ -1,1 +1,7 @@
 .DS_Store
+
+config/
+data/
+logs/
+
+archiva-data/
