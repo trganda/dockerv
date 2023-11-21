@@ -10,17 +10,25 @@ chmod 640 /usr/local/apache2/webdav.password
 mkdir -p /var/webdav
 chown www-data:www-data -R /var/webdav
 
+echo "Include conf/extra/webdav.conf" >> conf/httpd.conf
+
 # Add our dav location to the httpd config
 cat <<EOF > /usr/local/apache2/conf/extra/webdav.conf
 LoadModule	dav_module           modules/mod_dav.so
 LoadModule  dav_fs_module        modules/mod_dav_fs.so
 LoadModule  allowmethods_module  modules/mod_allowmethods.so
 
-Listen 8888
+Listen ${WEBDAV_PORT}
 # rewriting Destination because we're behind an SSL terminating reverse proxy
 # see http://www.dscentral.in/2013/04/04/502-bad-gateway-svn-copy-reverse-proxy/
-RequestHeader edit Destination ^https: http: early
-<VirtualHost *:8888>
+# RequestHeader edit Destination ^https: http: early
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+<VirtualHost *:${WEBDAV_PORT}>
+    SSLEngine on
+    SSLCertificateFile "/usr/local/apache2/conf/server.crt"
+    SSLCertificateKeyFile "/usr/local/apache2/conf/server.key"
     DocumentRoot "/var/webdav/"
     ErrorLog /usr/local/apache2/logs/error.log
     CustomLog /usr/local/apache2/logs/access.log combined
