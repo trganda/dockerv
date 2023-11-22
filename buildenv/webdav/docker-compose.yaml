@@ -18,12 +18,13 @@ services:
     environment:
       - USER=trganda
       - PASSWORD=changeme
-      - WEBDAV_PORT=8888
+      - WEBDAV_PORT=443
     volumes:
+      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./server.crt:/usr/local/apache2/conf/server.crt
       - ./server.key:/usr/local/apache2/conf/server.key
     ports:
-      - 8000:8888
+      - 8000:443
     networks:
       - webdav
 
