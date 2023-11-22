@@ -4,6 +4,8 @@ FROM httpd:2.4.58
 # ENV HTTPD_PREFIX /usr/local/apache2
 # WORKDIR "$HTTPD_PREFIX"
 
+WORKDIR /usr/local/apache2
+
 # Copy in our configuration files.
 COPY conf/ conf/
 
