@@ -13,18 +13,17 @@ services:
   #     - webdav
 
   webdav:
-    image: jongsx/webdav:1.0.0
+    image: jongsx/webdav
     container_name: webdav
-    environment:
-      - USER=trganda
-      - PASSWORD=changeme
-      - WEBDAV_PORT=443
-    volumes:
-      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
-      - ./server.crt:/usr/local/apache2/conf/server.crt
-      - ./server.key:/usr/local/apache2/conf/server.key
+    restart: always
     ports:
-      - 8000:443
+      - "443:443"
+    environment:
+      AUTH_TYPE: Basic
+      USERNAME: trganda
+      PASSWORD: changeme
+    volumes:
+      - /srv/dav:/var/lib/dav
     networks:
       - webdav
 
