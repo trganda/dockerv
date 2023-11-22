@@ -52,6 +52,8 @@ RUN set -ex; \
     apt-get update && apt-get install -y openssl
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80/tcp 443/tcp
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 CMD [ "httpd-foreground" ]
