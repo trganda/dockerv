@@ -1,35 +1,18 @@
-version: "3.8"
+version: "3"
 
 services:
-  # nginx:
-  #   image: nginx:1.25.3-alpine
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-  #   ports:
-  #     - "8000:80"
-  #   depends_on:
-  #     - webdav
-  #   networks:
-  #     - webdav
-
   webdav:
-    image: jongsx/webdav
+    image: jongsx/webdav:1.1.0
     container_name: webdav
-    restart: always
-    ports:
-      - "443:443"
     environment:
-      AUTH_TYPE: Basic
-      USERNAME: trganda
-      PASSWORD: changeme
+      - USER=trganda
+      - PASSWORD=changeme
     volumes:
-      - /srv/dav:/var/lib/dav
-    networks:
-      - webdav
-
-networks:
-  webdav:
-    name: webdav
+      - ./dav:/var/lib/webdav
+      # - ./conf/cert.crt:/usr/local/apache2/conf/server.crt
+      # - ./conf/privkey.key:/usr/local/apache2/conf/server.key
+    ports:
+      - 443:443
 
 volumes:
   webdav-data:
