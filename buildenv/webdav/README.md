@@ -11,10 +11,10 @@ version: "3"
 
 services:
   webdav:
-    image: jongsx/webdav:1.1.0
+    image: jongsx/webdav:2.0.0
     container_name: webdav
     environment:
-      - USER=trganda
+      - USERNAME=trganda
       - PASSWORD=changeme
     volumes:
       - ./dav:/var/lib/webdav

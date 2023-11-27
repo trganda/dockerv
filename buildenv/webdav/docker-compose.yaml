@@ -4,10 +4,10 @@ services:
   webdav:
     image: jongsx/webdav:2.1.0
     environment:
-      - USER=trganda
+      - USERNAME=trganda
       - PASSWORD=changeme
     volumes:
-      - ./dav:/var/lib/webdav
+      - D:\Documents\webdav:/var/lib/webdav
       # - ./conf/cert.crt:/usr/local/apache2/conf/server.crt
       # - ./conf/privkey.key:/usr/local/apache2/conf/server.key
     ports:
