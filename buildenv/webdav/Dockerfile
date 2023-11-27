@@ -1,11 +1,5 @@
 FROM httpd:2.4.58
 
-COPY entrypoint.sh /usr/local/apache2/entrypoint.sh
-RUN chmod 755 /usr/local/apache2/entrypoint.sh
-
-ARG USER
-ARG PASSWORD
-
 WORKDIR /usr/local/apache2
 
 COPY conf/webdav.conf conf/extra/webdav.conf
@@ -41,6 +35,9 @@ RUN set -ex; \
 
 EXPOSE 443
 
-ENTRYPOINT ["/usr/local/apache2/entrypoint.sh"]
+COPY docker-entrypoint.sh /usr/local/apache2/docker-entrypoint.sh
+RUN chmod 755 /usr/local/apache2/docker-entrypoint.sh
 
-CMD ["httpd-foreground"]
+ENTRYPOINT [ "/usr/local/apache2/docker-entrypoint.sh" ]
+
+CMD [ "httpd-foreground" ]

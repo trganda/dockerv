@@ -1,7 +1,13 @@
-#!/bin/sh
+set -e
 
-# init passwd
-htpasswd -bc /usr/local/apache2/webdav.password ${USER} ${PASSWORD}
+# Add password hash, unless "user.passwd" already exists (ie, bind mounted).
+if [ ! -e "/usr/local/apache2/webdav.password" ]; then
+    touch "/usr/local/apache2/webdav.password"
+    # Only generate a password hash if both username and password given.
+    if [ "x$USERNAME" != "x" ] && [ "x$PASSWORD" != "x" ]; then
+        htpasswd -B -b -c /usr/local/apache2/webdav.password ${USER} ${PASSWORD}
+    fi
+fi
 
 chown root:www-data /usr/local/apache2/webdav.password
 chmod 640 /usr/local/apache2/webdav.password

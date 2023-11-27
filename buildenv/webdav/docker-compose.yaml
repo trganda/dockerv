@@ -2,8 +2,7 @@ version: "3"
 
 services:
   webdav:
-    image: jongsx/webdav:1.1.0
-    container_name: webdav
+    image: jongsx/webdav:2.1.0
     environment:
       - USER=trganda
       - PASSWORD=changeme
