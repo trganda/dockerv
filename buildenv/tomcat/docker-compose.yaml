@@ -1,0 +1,9 @@
+version: '3'
+services:
+  tomcat:
+    image: tomcat:8.5.92-jdk8
+    platform: linux/x86_64
+    ports:
+      - 8088:8080
+    volumes:
+      - ./ROOT:/usr/local/tomcat/webapps/ROOT
