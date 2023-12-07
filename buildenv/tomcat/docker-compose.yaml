@@ -1,9 +1,11 @@
 version: '3'
 services:
   tomcat:
-    image: tomcat:8.5.92-jdk8
-    platform: linux/x86_64
+    image: tomcat:8.5.77-jdk8
+    environment:
+      - CATALINA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,suspend=n,server=y
     ports:
       - 8088:8080
+      - 5005:5005
     volumes:
       - ./ROOT:/usr/local/tomcat/webapps/ROOT
