@@ -19,7 +19,7 @@ fi
 
 # Create directories for Dav data and lock database.
 [ ! -d "/var/lib/webdav/data" ] && mkdir -p "/var/lib/webdav/data"
-chown www-data:www-data "/var/lib/webdav"
+chown -R www-data:www-data "/var/lib/webdav"
 
 # Run the command given in the Dockerfile at CMD
 exec "$@"
