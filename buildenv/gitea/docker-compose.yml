@@ -6,7 +6,7 @@ networks:
 
 services:
   server:
-    image: gitea/gitea:1.18.1
+    image: gitea/gitea:latest
     container_name: gitea
     environment:
       - USER_UID=1000
@@ -16,7 +16,7 @@ services:
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=gitea
-    restart: always
+      - GITEA__actions__ENABLED=true
     networks:
       - gitea
     volumes:
@@ -25,7 +25,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
-      - "222:22"
     depends_on:
       - db
 

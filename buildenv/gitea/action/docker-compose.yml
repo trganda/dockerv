@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  runner:
+    image: gitea/act_runner:nightly
+    environment:
+      # CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "http://198.19.249.3:3000"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "xxx"
+      GITEA_RUNNER_NAME: ""
+      GITEA_RUNNER_LABELS: ""
+    volumes:
+      #- ./config.yaml:/config.yaml
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
