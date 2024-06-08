@@ -1,0 +1,4 @@
+services:
+  streampark-console:
+    image: apache/streampark:2.1.4
+
