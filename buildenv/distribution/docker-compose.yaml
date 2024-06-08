@@ -1,16 +1,21 @@
 services:
+  nginx:
+    restart: unless-stopped
+    image: nginx:1.20.0
+    ports:
+      - 8443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs/cert.crt:/root/ssl/cert.crt
+      - ./certs/cert.key:/root/ssl/cert.key
   registry:
     restart: unless-stopped
     image: registry:2
-    ports:
-      - 5000:5000
     environment:
-      USERNAME: trganda
-      PASSWORD: changeme
-      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/cert.crt
-      REGISTRY_HTTP_TLS_KEY: /certs/cert.key
-      REGISTRY_AUTH: htpasswd
-      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
-      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      # REGISTRY_HTTP_TLS_CERTIFICATE: /certs/cert.crt
+      # REGISTRY_HTTP_TLS_KEY: /certs/cert.key
+      # REGISTRY_AUTH: htpasswd
+      # REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      # REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
       REGISTRY_PROXY_REMOTEURL: https://registry-1.docker.io
       REGISTRY_PROXY_TTL: 48h
