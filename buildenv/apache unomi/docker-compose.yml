@@ -1,0 +1,24 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+  unomi:
+    # Unomi version can be updated based on your needs
+    image: apache/unomi:2.4.0
+    environment:
+      - KARAF_DEBUG=true
+      - UNOMI_GRAPHQL_FEATURE_ACTIVATED=true
+      - UNOMI_ELASTICSEARCH_ADDRESSES=elasticsearch:9200
+      - UNOMI_THIRDPARTY_PROVIDER1_IPADDRESSES=0.0.0.0/0,::1,127.0.0.1
+    ports:
+      - 8181:8181
+      - 9443:9443
+      - 8102:8102
+      - 5055:5005
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
