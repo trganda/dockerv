@@ -1,0 +1,83 @@
+volumes:
+  data-postgres: {}
+  data-opennms: {}
+  elasticsearch_data: {}
+
+services:
+  database:
+    image: postgres:15
+    container_name: database
+    environment:
+      - TZ=Europe/Berlin
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
+  horizon:
+    image: opennms/horizon:33.0.5
+    container_name: horizon
+    environment:
+      - TZ=Europe/Berlin
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - OPENNMS_DBNAME=opennms
+      - OPENNMS_DBUSER=opennms
+      - OPENNMS_DBPASS=opennms
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    volumes:
+      - data-opennms:/opt/opennms/share/rrd
+      - ./overlay:/opt/opennms-overlay
+    command: ["-s"]
+    ports:
+      - "8980:8980/tcp"
+      - "8101:8101/tcp"
+      - "61616:61616/tcp"
+      - "5005:5005"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "-I", "http://localhost:8980/opennms/login.jsp" ]
+      interval: 1m
+      timeout: 5s
+      retries: 3
+
+  minion:
+    image: opennms/minion:33.0.5
+    container_name: minion
+    environment:
+      - TZ=Europe/Berlin
+      - JAVA_MIN_MEM=512M
+      - JAVA_MAX_MEM=2048M
+    command: ["-c"]
+    volumes:
+      - ./minion-config.yaml:/opt/minion/minion-config.yaml
+    healthcheck:
+      test: "/health.sh"
+      interval: 30s
+      timeout: 6s
+      retries: 3
+    ports:
+      - '514:1514/udp'
+      - '162:1162/udp'
+      - '8201:8201/tcp'
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200

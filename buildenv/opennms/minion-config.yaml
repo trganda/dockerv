@@ -1,0 +1,13 @@
+---
+broker-url: 'failover:tcp://horizon:61616'
+id: 'my-minion'
+location: 'my-location'
+
+netmgt:
+  syslog:
+    syslog.listen.interface: "0.0.0.0"
+    syslog.listen.port: 1514
+
+  traps:
+    trapd.listen.interface: "0.0.0.0"
+    trapd.listen.port: 1162
