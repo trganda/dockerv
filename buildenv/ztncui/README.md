@@ -19,3 +19,5 @@ Run the server:
 ```bash
 docker compose up -d
 ```
+
+Login to `<host>:8443` with the username `admin` and password `ztncuipasswd`.
