@@ -1,4 +1,3 @@
-version: '3'
 services:
   tomcat:
     image: tomcat:8.5.77-jdk8
