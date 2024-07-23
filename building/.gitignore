@@ -1,2 +1,5 @@
 logs/
+auth/
+cert.crt
+cert.key
 authorized_keys*
