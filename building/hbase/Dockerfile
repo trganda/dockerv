@@ -11,7 +11,7 @@ RUN tar -zxvf hbase-2.4.8-bin.tar.gz \
     && cd hbase-2.4.8 \
     && export JAVA_HOME=/usr/local/openjdk-8
 
-ADD scripts/entrypointsh /opt/entrypointsh
+ADD entrypointsh /opt/entrypoint.sh
 
 # Exposing 16010 hbase web tools and 2181 Zookeeper port
 EXPOSE 16010 2181
@@ -20,4 +20,4 @@ EXPOSE 16010 2181
 VOLUME ["/data/hbase"]
 
 # 
-CMD [ "entrypointsh" ]
+CMD [ "entrypoint.sh" ]
