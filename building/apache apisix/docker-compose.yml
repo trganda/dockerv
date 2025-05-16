@@ -1,0 +1,77 @@
+services:
+  apisix-dashboard:
+    image: apache/apisix-dashboard
+    volumes:
+      - ./apisix_dashboard/config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml:ro
+    depends_on:
+      - etcd
+    ports:
+      - "9000:9000"
+    networks:
+      - apisix
+
+  etcd:
+    image: bitnami/etcd:3.4.9
+    environment:
+      ETCD_ENABLE_V2: "true"
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
+      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+    ports:
+      - "2379:2379"
+    networks:
+      - apisix
+
+  apisix:
+    image: apache/apisix
+    volumes:
+      - ./apisix_conf/apisix.yaml:/usr/local/apisix/conf/apisix.yaml
+      - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    depends_on:
+      - etcd
+    ports:
+      - "9180:9180"
+      - "9080:9080"
+      - "9091:9091"
+      - "9443:9443"
+      # - "9092:9092"
+    networks:
+      - apisix
+      - kafka_kafka-net
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
+    networks:
+      - apisix
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - apisix
+
+  web1:
+    image: nginx
+    restart: always
+    volumes:
+      - ./upstream/web1.conf:/etc/nginx/nginx.conf
+    ports:
+      - "9081:80"
+    environment:
+      - NGINX_PORT=80
+    networks:
+      apisix:
+
+
+networks:
+  apisix:
+    driver: bridge
+  kafka_kafka-net:
+    external: true

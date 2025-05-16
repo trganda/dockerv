@@ -1,0 +1,55 @@
+conf:
+  listen:
+    port: 9000
+  etcd:
+    endpoints:          # supports defining multiple etcd host addresses for an etcd cluster
+      - http://etcd:2379
+authentication:
+  secret:
+    secret              # secret for jwt token generation.
+  expire_time: 3600     # jwt token expire time, in second
+  users:                # yamllint enable rule:comments-indentation
+    - username: admin   # username and password for login `manager api`
+      password: admin
+    - username: user
+      password: user
+plugins:                          # plugin list (sorted in alphabetical order)
+  - api-breaker
+  - authz-keycloak
+  - basic-auth
+  - batch-requests
+  - consumer-restriction
+  - cors
+  - echo
+  - fault-injection
+  - grpc-transcode
+  - hmac-auth
+  - http-logger
+  - ip-restriction
+  - jwt-auth
+  - kafka-logger
+  - key-auth
+  - limit-conn
+  - limit-count
+  - limit-req
+  - openid-connect
+  - prometheus
+  - proxy-cache
+  - proxy-mirror
+  - proxy-rewrite
+  - redirect
+  - referer-restriction
+  - request-id
+  - request-validation
+  - response-rewrite
+  - serverless-post-function
+  - serverless-pre-function
+  - sls-logger
+  - syslog
+  - tcp-logger
+  - udp-logger
+  - uri-blocker
+  - wolf-rbac
+  - zipkin
+  - server-info
+  - traffic-split
