@@ -1,0 +1,21 @@
+datasources:
+ - name: apisix
+   access: proxy
+   editable: true
+   is_default: true
+   org_id: 1
+   type: prometheus
+   url: http://prometheus:9090
+   version: 1
+ - name: Loki
+   type: loki
+   access: proxy
+   url: http://loki:3100
+   jsonData:
+     timeout: 60
+     maxLines: 1000
+ - name: Jaeger
+   type: jaeger
+   access: proxy
+   uid: jaeger
+   url: http://localhost:16686
