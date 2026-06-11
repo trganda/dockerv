@@ -5,3 +5,5 @@ data/
 logs/
 
 archiva-data/
+.idea/
+target/

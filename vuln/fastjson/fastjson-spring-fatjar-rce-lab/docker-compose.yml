@@ -1,0 +1,61 @@
+services:
+  attacker:
+    build: ./attacker
+    hostname: attacker
+    environment:
+      ATTACKER_HOST: attacker
+      ATTACKER_PORT: "8000"
+    ports:
+      - "8000:8000"
+
+  attacker-fd:
+    build: ./attacker-fd
+    hostname: attacker-fd
+    environment:
+      ATTACKER_FD_HOST: attacker-fd
+      ATTACKER_FD_PORT: "8001"
+      ATTACKER_FD_PATH: x
+      FD_START: "3"
+      FD_END: "64"
+    ports:
+      - "8001:8001"
+
+  tomcat:
+    build: ./tomcat
+    depends_on:
+      - attacker
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+    ports:
+      - "18080:8080"
+      - "5005:5005"
+
+  jetty:
+    build: ./jetty
+    depends_on:
+      - attacker
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+    ports:
+      - "18081:8080"
+      - "5006:5005"
+
+  tomcat-jdk21-fd:
+    build: ./tomcat-jdk21-fd
+    depends_on:
+      - attacker-fd
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6005"
+    ports:
+      - "28080:8080"
+      - "6005:6005"
+
+  jetty-jdk21-fd:
+    build: ./jetty-jdk21-fd
+    depends_on:
+      - attacker-fd
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6006"
+    ports:
+      - "28081:8080"
+      - "6006:6006"
