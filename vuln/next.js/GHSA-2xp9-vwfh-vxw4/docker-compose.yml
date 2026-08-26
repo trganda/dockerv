@@ -1,0 +1,32 @@
+services:
+  vuln:
+    build:
+      context: .
+      dockerfile: Dockerfile.next
+      args:
+        NEXT_VERSION: 16.3.2
+    ports:
+      - "13000:4300"
+    environment:
+      - MALLOC_CHECK_=3
+      - MALLOC_PERTURB_=100
+
+  patched:
+    build:
+      context: .
+      dockerfile: Dockerfile.next
+      args:
+        NEXT_VERSION: 16.3.3
+    ports:
+      - "13001:4300"
+    environment:
+      - MALLOC_CHECK_=3
+      - MALLOC_PERTURB_=100
+
+  asan:
+    build:
+      context: .
+      dockerfile: Dockerfile.asan
+    volumes:
+      - ./poc:/poc:ro
+    command: ["sleep", "infinity"]

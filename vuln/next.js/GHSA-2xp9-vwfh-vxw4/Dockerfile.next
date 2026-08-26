@@ -1,0 +1,23 @@
+FROM node:20-slim
+
+# next@16.3.2 (vulnerable) / next@16.3.3 (patched), both with sharp 0.35.3,
+# which bundles libheif 1.23.1 (vulnerable, fixed in 1.23.2).
+ARG NEXT_VERSION=16.3.2
+
+WORKDIR /app
+
+COPY app/package.json ./
+RUN npm install --no-audit --no-fund \
+      next@${NEXT_VERSION} react@19 react-dom@19 sharp@0.35.3
+
+COPY app/next.config.js ./
+COPY app/pages ./pages
+COPY app/public ./public
+
+RUN npm run build
+
+ENV NODE_ENV=production
+
+EXPOSE 4300
+
+CMD ["npm", "run", "start"]

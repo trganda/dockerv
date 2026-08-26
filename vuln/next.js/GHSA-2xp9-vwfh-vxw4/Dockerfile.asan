@@ -1,0 +1,27 @@
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential cmake git clang libclang-rt-dev ca-certificates libde265-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+# vulnerable libheif per GHSA-g89c-p67h-r497 (patched in v1.23.2)
+RUN git clone --quiet --depth 1 --branch v1.23.1 https://github.com/strukturag/libheif
+
+RUN cmake -S libheif -B build \
+      -DCMAKE_C_COMPILER=clang \
+      -DCMAKE_CXX_COMPILER=clang++ \
+      -DCMAKE_C_FLAGS="-fsanitize=address -fno-omit-frame-pointer -g" \
+      -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer -g" \
+      -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address" \
+      -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address" \
+      -DWITH_EXAMPLES=ON \
+      -DWITH_GDK_PIXBUF=OFF \
+      -DWITH_LIBDE265=ON \
+    && cmake --build build --target heif-dec -j"$(nproc)"
+
+ENV LD_LIBRARY_PATH=/src/build/libheif
+ENV ASAN_OPTIONS=detect_leaks=0
+
+ENTRYPOINT ["/src/build/examples/heif-dec"]
