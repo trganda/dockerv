@@ -1,0 +1,28 @@
+--- libheif/image/pixelimage.cc
++++ libheif/image/pixelimage.cc
+@@ -1947,6 +1947,7 @@
+         // HDR planar
+ 
+         size_t in_stride = plane.stride;
++        if (channel == heif_channel_Alpha) { fprintf(stderr, "[dbg] scale-HDR alpha: in=%p bpp=%u\n", (void*)plane.mem, plane.m_bit_depth); }
+         const uint16_t* in_data = static_cast<const uint16_t*>(plane.mem);
+ 
+         size_t out_stride = 0;
+@@ -1965,6 +1966,17 @@
+           }
+         }
+       }
++    }
++
++    if (out_img->has_channel(heif_channel_Alpha)) {
++      size_t dummy = 0;
++      uint16_t* dbgmem = out_img->get_channel_memory<uint16_t>(heif_channel_Alpha, &dummy);
++      char* w = ((char*)dbgmem) + 16399;
++      fprintf(stderr, "[dbg] alpha hdr: %016lx %016lx\n",
++              *(uint64_t*)(((char*)dbgmem)-16), *(uint64_t*)(((char*)dbgmem)-8));
++      fprintf(stderr, "[dbg] window[0..31]: %016lx %016lx %016lx %016lx\n",
++              *(uint64_t*)(w), *(uint64_t*)(w+8), *(uint64_t*)(w+16), *(uint64_t*)(w+24));
++      fprintf(stderr, "[dbg] target+256 byte: %02x\n", (unsigned char)*(w+256));
+     }
+   }
+ 

@@ -1,0 +1,13 @@
+services:
+  exp:
+    build:
+      context: .
+      dockerfile: Dockerfile.exp
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ./:/src/work:rw
+    working_dir: /src
+    command: ["bash"]
+    stdin_open: true
+    tty: true

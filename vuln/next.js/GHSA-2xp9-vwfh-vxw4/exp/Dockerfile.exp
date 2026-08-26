@@ -1,0 +1,34 @@
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential cmake git gdb file binutils python3 \
+      ca-certificates libde265-dev ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+# vulnerable libheif (patched in v1.23.2), release build, no sanitizers
+RUN git clone --quiet --depth 1 --branch v1.23.1 https://github.com/strukturag/libheif
+
+COPY debug.patch /src/debug.patch
+RUN cd libheif && patch -p0 < /src/debug.patch
+
+RUN cmake -S libheif -B build \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DWITH_EXAMPLES=OFF \
+      -DWITH_GDK_PIXBUF=OFF \
+      -DWITH_LIBDE265=ON \
+    && cmake --build build -j"$(nproc)" \
+    && cmake --install build
+
+COPY harness.c /src/harness.c
+RUN gcc -O0 -g -fno-omit-frame-pointer -no-pie harness.c -o harness \
+        -I/src/libheif/api -L/usr/local/lib -lheif -lde265 \
+    && echo "/usr/local/lib" > /etc/ld.so.conf.d/libheif.conf && ldconfig
+
+COPY gen_exp.py /src/gen_exp.py
+
+WORKDIR /src
+
+# run with ASLR off for deterministic addresses:
+#   docker compose run --rm exp ./harness 1 /src/payload.avif
